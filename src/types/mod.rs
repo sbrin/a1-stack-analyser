@@ -1,10 +1,7 @@
 pub mod rule;
 pub mod techs;
 
-use rule::SupportedDeps;
-
 use crate::payload::payload::Payload;
-use crate::types::techs::AllowedKeys;
 
 #[derive(Clone)]
 pub struct GraphEdge {
@@ -13,7 +10,7 @@ pub struct GraphEdge {
     write: bool,
 }
 
-pub type Dependency = (SupportedDeps, String, String);
+pub type Dependency = (String, String, String);
 
 pub struct Analyser {
     /// Unique random id for this payload
@@ -28,11 +25,11 @@ pub struct Analyser {
 
     /// If this payload is a specific Technology.
     /// e.g: if it's a Postgresql database, the tech will be: "postgresql"
-    pub tech: Option<AllowedKeys>,
+    pub tech: Option<String>,
 
     /// List matched tech from the rules.
     /// Computed with the dependencies and languages.
-    pub techs: std::collections::HashSet<AllowedKeys>,
+    pub techs: std::collections::HashSet<String>,
 
     /// If this payload is hosted by another payload.
     /// e.g: we found a vercel dependency at the same level, this payload will be considered in the component Vercel.

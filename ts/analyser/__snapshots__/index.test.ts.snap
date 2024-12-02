@@ -1,0 +1,1857 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`analyser > should register only component of the same tech 1`] = `
+{
+  "childs": [
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "postgres",
+          "15.1-alpine",
+        ],
+      ],
+      "edges": [],
+      "id": "3",
+      "inComponent": null,
+      "languages": {},
+      "name": "db",
+      "path": [
+        "/docker-compose.yml",
+        "/package.json",
+      ],
+      "reason": [],
+      "tech": "postgresql",
+      "techs": [
+        "postgresql",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "npm",
+          "pg",
+          "1.0.0",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "3",
+          "write": true,
+        },
+      ],
+      "id": "4",
+      "inComponent": null,
+      "languages": {
+        "JSON": 1,
+        "YAML": 1,
+      },
+      "name": "test",
+      "path": [
+        "/package.json",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "docker",
+        "nodejs",
+        "postgresql",
+      ],
+    },
+  ],
+  "dependencies": [
+    [
+      "docker",
+      "postgres",
+      "15.1-alpine",
+    ],
+    [
+      "npm",
+      "pg",
+      "1.0.0",
+    ],
+  ],
+  "edges": [],
+  "id": "6",
+  "inComponent": null,
+  "languages": {
+    "JSON": 2,
+    "YAML": 2,
+  },
+  "name": "flatten",
+  "path": [
+    "/",
+    "/docker-compose.yml",
+    "/package.json",
+  ],
+  "reason": [],
+  "tech": null,
+  "techs": [
+    "docker",
+    "nodejs",
+    "postgresql",
+  ],
+}
+`;
+
+exports[`analyser > should run correctly 1`] = `
+{
+  "childs": [
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "postgres",
+          "14.5-alpine",
+        ],
+      ],
+      "edges": [],
+      "id": "9",
+      "inComponent": null,
+      "languages": {},
+      "name": "db",
+      "path": [
+        "/docker-compose.yml",
+      ],
+      "reason": [
+        "postgresql matched: /^postgres$/",
+      ],
+      "tech": "postgresql",
+      "techs": [],
+    },
+    {
+      "childs": [
+        {
+          "childs": [
+            {
+              "childs": [],
+              "dependencies": [],
+              "edges": [],
+              "id": "23",
+              "inComponent": null,
+              "languages": {},
+              "name": "Datadog",
+              "path": [
+                "/pkgs/api/package.json",
+              ],
+              "reason": [
+                "datadog matched: /^dd-trace$/",
+              ],
+              "tech": "datadog",
+              "techs": [],
+            },
+          ],
+          "dependencies": [
+            [
+              "npm",
+              "dd-trace",
+              "1.0.1",
+            ],
+            [
+              "npm",
+              "fastify",
+              "4.17.0",
+            ],
+            [
+              "npm",
+              "prisma",
+              "4.13.0",
+            ],
+            [
+              "npm",
+              "typescript",
+              "5.0.4",
+            ],
+          ],
+          "edges": [
+            {
+              "read": true,
+              "target": "23",
+              "write": true,
+            },
+          ],
+          "id": "22",
+          "inComponent": null,
+          "languages": {
+            "JSON": 1,
+          },
+          "name": "@fake/api",
+          "path": [
+            "/pkgs/api/package.json",
+          ],
+          "reason": [
+            "datadog matched: /^dd-trace$/",
+            "fastify matched: /^fastify$/",
+            "prisma matched: /^prisma$/",
+            "typescript matched: /^typescript$/",
+            "matched file: package.json",
+          ],
+          "tech": null,
+          "techs": [
+            "datadog",
+            "fastify",
+            "nodejs",
+            "prisma",
+            "typescript",
+          ],
+        },
+        {
+          "childs": [
+            {
+              "childs": [],
+              "dependencies": [],
+              "edges": [],
+              "id": "25",
+              "inComponent": null,
+              "languages": {},
+              "name": "Vercel",
+              "path": [
+                "/pkgs/app/package.json",
+              ],
+              "reason": [
+                "matched file: .vercel",
+              ],
+              "tech": "vercel",
+              "techs": [],
+            },
+          ],
+          "dependencies": [
+            [
+              "npm",
+              "@fake/api",
+              "1.0.0",
+            ],
+            [
+              "npm",
+              "react",
+              "4.17.0",
+            ],
+            [
+              "npm",
+              "typescript",
+              "5.0.4",
+            ],
+            [
+              "npm",
+              "vite",
+              "4.3.3",
+            ],
+          ],
+          "edges": [],
+          "id": "24",
+          "inComponent": "25",
+          "languages": {
+            "HTML": 1,
+            "JSON": 1,
+            "SCSS": 1,
+          },
+          "name": "@fake/app",
+          "path": [
+            "/pkgs/app/package.json",
+          ],
+          "reason": [
+            "react matched: /^react$/",
+            "typescript matched: /^typescript$/",
+            "vite matched: /^vite$/",
+            "matched file: .vercel",
+            "matched file: package.json",
+            "matched extension: .scss",
+          ],
+          "tech": null,
+          "techs": [
+            "nodejs",
+            "react",
+            "scss",
+            "typescript",
+            "vercel",
+            "vite",
+          ],
+        },
+        {
+          "childs": [],
+          "dependencies": [],
+          "edges": [],
+          "id": "13",
+          "inComponent": null,
+          "languages": {},
+          "name": "GitHub",
+          "path": [
+            "/package.json",
+          ],
+          "reason": [
+            "matched file: .github",
+          ],
+          "tech": "github",
+          "techs": [],
+        },
+        {
+          "childs": [],
+          "dependencies": [
+            [
+              "terraform",
+              "registry.terraform.io/hashicorp/google",
+              "4.61.0",
+            ],
+          ],
+          "edges": [],
+          "id": "29",
+          "inComponent": null,
+          "languages": {},
+          "name": "Google Cloud Platform",
+          "path": [
+            "/terraform/.terraform.lock.hcl",
+          ],
+          "reason": [
+            "gcp matched: /^registry.terraform.io\\\\/hashicorp\\\\/google$/",
+          ],
+          "tech": "gcp",
+          "techs": [],
+        },
+        {
+          "childs": [],
+          "dependencies": [],
+          "edges": [],
+          "id": "16",
+          "inComponent": null,
+          "languages": {},
+          "name": "Postgres",
+          "path": [
+            "/deno/deno.lock",
+          ],
+          "reason": [
+            "postgresql matched: /\\\\/x\\\\/postgres@/",
+          ],
+          "tech": "postgresql",
+          "techs": [],
+        },
+        {
+          "childs": [],
+          "dependencies": [
+            [
+              "terraform",
+              "registry.terraform.io/vercel/vercel",
+              "4.61.0",
+            ],
+          ],
+          "edges": [],
+          "id": "30",
+          "inComponent": null,
+          "languages": {},
+          "name": "Vercel",
+          "path": [
+            "/terraform/.terraform.lock.hcl",
+          ],
+          "reason": [
+            "vercel matched: /^registry.terraform.io\\\\/vercel\\\\/vercel$/",
+          ],
+          "tech": "vercel",
+          "techs": [],
+        },
+        {
+          "childs": [],
+          "dependencies": [
+            [
+              "rust",
+              "dotenv",
+              "0.15.0",
+            ],
+          ],
+          "edges": [],
+          "id": "27",
+          "inComponent": null,
+          "languages": {
+            "TOML": 1,
+          },
+          "name": "rust-server",
+          "path": [
+            "/rust/Cargo.toml",
+          ],
+          "reason": [
+            "matched file: Cargo.toml",
+          ],
+          "tech": null,
+          "techs": [
+            "rust",
+          ],
+        },
+        {
+          "childs": [],
+          "dependencies": [],
+          "edges": [],
+          "id": "18",
+          "inComponent": null,
+          "languages": {
+            "Go": 1,
+          },
+          "name": "server",
+          "path": [
+            "/golang/cmd/server/main.go",
+          ],
+          "reason": [
+            "matched file: main.go",
+          ],
+          "tech": "golang",
+          "techs": [
+            "golang",
+          ],
+        },
+        {
+          "childs": [
+            {
+              "childs": [],
+              "dependencies": [],
+              "edges": [],
+              "id": "21",
+              "inComponent": null,
+              "languages": {},
+              "name": "Algolia",
+              "path": [
+                "/php/composer.json",
+              ],
+              "reason": [
+                "algolia matched: /^algolia\\\\/algoliasearch-client-php$/",
+              ],
+              "tech": "algolia",
+              "techs": [],
+            },
+            {
+              "childs": [],
+              "dependencies": [],
+              "edges": [],
+              "id": "20",
+              "inComponent": null,
+              "languages": {},
+              "name": "Redis",
+              "path": [
+                "/php/composer.json",
+              ],
+              "reason": [
+                "redis matched: /^predis\\\\/predis$/",
+              ],
+              "tech": "redis",
+              "techs": [],
+            },
+          ],
+          "dependencies": [
+            [
+              "php",
+              "mockery/mockery",
+              "~1.0",
+            ],
+            [
+              "php",
+              "phpunit/phpunit",
+              "^9.0",
+            ],
+            [
+              "php",
+              "php-mock/php-mock-mockery",
+              "^1.3",
+            ],
+            [
+              "php",
+              "dms/phpunit-arraysubset-asserts",
+              "^0.2.1",
+            ],
+            [
+              "php",
+              "fakerphp/faker",
+              "^1.13",
+            ],
+            [
+              "php",
+              "slevomat/coding-standard",
+              "^7.0",
+            ],
+            [
+              "php",
+              "nunomaduro/larastan",
+              "^2.1",
+            ],
+            [
+              "php",
+              "laravel/tinker",
+              "^2.7",
+            ],
+            [
+              "php",
+              "php",
+              ">=8.0",
+            ],
+            [
+              "php",
+              "laravel/framework",
+              "^9.0",
+            ],
+            [
+              "php",
+              "james-heinrich/getid3",
+              "^1.9",
+            ],
+            [
+              "php",
+              "guzzlehttp/guzzle",
+              "^7.0.1",
+            ],
+            [
+              "php",
+              "aws/aws-sdk-php-laravel",
+              "^3.1",
+            ],
+            [
+              "php",
+              "pusher/pusher-php-server",
+              "^4.0",
+            ],
+            [
+              "php",
+              "predis/predis",
+              "~1.0",
+            ],
+            [
+              "php",
+              "jackiedo/dotenv-editor",
+              "^2.0",
+            ],
+            [
+              "php",
+              "ext-exif",
+              "*",
+            ],
+            [
+              "php",
+              "ext-gd",
+              "*",
+            ],
+            [
+              "php",
+              "ext-fileinfo",
+              "*",
+            ],
+            [
+              "php",
+              "ext-json",
+              "*",
+            ],
+            [
+              "php",
+              "ext-SimpleXML",
+              "*",
+            ],
+            [
+              "php",
+              "daverandom/resume",
+              "^0.0.3",
+            ],
+            [
+              "php",
+              "laravel/helpers",
+              "^1.0",
+            ],
+            [
+              "php",
+              "intervention/image",
+              "^2.5",
+            ],
+            [
+              "php",
+              "doctrine/dbal",
+              "^3.0",
+            ],
+            [
+              "php",
+              "lstrojny/functional-php",
+              "^1.14",
+            ],
+            [
+              "php",
+              "teamtnt/laravel-scout-tntsearch-driver",
+              "^11.1",
+            ],
+            [
+              "php",
+              "algolia/algoliasearch-client-php",
+              "^3.3",
+            ],
+            [
+              "php",
+              "laravel/ui",
+              "^3.2",
+            ],
+            [
+              "php",
+              "webmozart/assert",
+              "^1.10",
+            ],
+            [
+              "php",
+              "laravel/sanctum",
+              "^2.15",
+            ],
+            [
+              "php",
+              "laravel/scout",
+              "^9.4",
+            ],
+            [
+              "php",
+              "nunomaduro/collision",
+              "^6.2",
+            ],
+            [
+              "php",
+              "jwilsson/spotify-web-api-php",
+              "^5.2",
+            ],
+            [
+              "php",
+              "meilisearch/meilisearch-php",
+              "^0.24.0",
+            ],
+            [
+              "php",
+              "http-interop/http-factory-guzzle",
+              "^1.2",
+            ],
+          ],
+          "edges": [
+            {
+              "read": true,
+              "target": "20",
+              "write": true,
+            },
+            {
+              "read": true,
+              "target": "21",
+              "write": true,
+            },
+          ],
+          "id": "19",
+          "inComponent": null,
+          "languages": {
+            "JSON": 1,
+          },
+          "name": "symfony/translation",
+          "path": [
+            "/php/composer.json",
+          ],
+          "reason": [
+            "phpunit matched: /^phpunit\\\\/phpunit$/",
+            "laravel matched: /^laravel\\\\/framework$/",
+            "redis matched: /^predis\\\\/predis$/",
+            "algolia matched: /^algolia\\\\/algoliasearch-client-php$/",
+            "matched file: composer.json",
+          ],
+          "tech": null,
+          "techs": [
+            "algolia",
+            "laravel",
+            "php",
+            "phpunit",
+            "redis",
+          ],
+        },
+      ],
+      "dependencies": [
+        [
+          "npm",
+          "@typescript-eslint/eslint-plugin",
+          "5.57.1",
+        ],
+        [
+          "npm",
+          "@typescript-eslint/parser",
+          "5.57.1",
+        ],
+        [
+          "npm",
+          "eslint",
+          "8.39.0",
+        ],
+        [
+          "npm",
+          "prettier",
+          "2.8.7",
+        ],
+        [
+          "npm",
+          "typescript",
+          "4.9.5",
+        ],
+        [
+          "githubAction",
+          "actions/checkout",
+          "v3",
+        ],
+        [
+          "githubAction",
+          "actions/setup-node",
+          "v3",
+        ],
+        [
+          "githubAction",
+          "codecov/codecov-action",
+          "v3",
+        ],
+        [
+          "docker",
+          "node",
+          "18.17.0",
+        ],
+        [
+          "deno",
+          "https://deno.land/x/postgres@v0.17.0/mod.ts",
+          "23a1a36928f1b6d3b0170aaa67de09af12aa998525f608ff7331b9fb364cbde6",
+        ],
+        [
+          "golang",
+          "github.com/google/uuid",
+          "v1.3.0",
+        ],
+        [
+          "ruby",
+          "rails",
+          "6.1.7.4",
+        ],
+        [
+          "ruby",
+          "puma\\", \\"6.3.0",
+          "latest",
+        ],
+        [
+          "terraform",
+          "registry.terraform.io/hashicorp/google",
+          "4.61.0",
+        ],
+        [
+          "terraform",
+          "registry.terraform.io/vercel/vercel",
+          "4.61.0",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "13",
+          "write": true,
+        },
+      ],
+      "id": "12",
+      "inComponent": null,
+      "languages": {
+        "AMPL": 1,
+        "HCL": 1,
+        "JSON": 1,
+        "YAML": 3,
+      },
+      "name": "fake",
+      "path": [
+        "/package.json",
+      ],
+      "reason": [
+        "eslint matched: /^eslint$/",
+        "prettier matched: /^prettier$/",
+        "typescript matched: /^typescript$/",
+        "matched file: .github",
+        "matched file: docker-compose.yml",
+        "matched file: package.json",
+        "matched file: /.github/workflows/invalid.yml",
+        "matched file: deno.lock",
+        "matched file: go.mod",
+        "matched file: Gemfile",
+        "matched file: .terraform.lock.hcl",
+      ],
+      "tech": null,
+      "techs": [
+        "deno",
+        "docker",
+        "eslint",
+        "github",
+        "github.actions",
+        "golang",
+        "nodejs",
+        "prettier",
+        "ruby",
+        "terraform",
+        "typescript",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "redis",
+          "7.0.4-alpine",
+        ],
+      ],
+      "edges": [],
+      "id": "10",
+      "inComponent": null,
+      "languages": {},
+      "name": "redis",
+      "path": [
+        "/docker-compose.yml",
+      ],
+      "reason": [
+        "redis matched: /redis/",
+      ],
+      "tech": "redis",
+      "techs": [],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "unknown",
+          "7.17.5",
+        ],
+      ],
+      "edges": [],
+      "id": "11",
+      "inComponent": null,
+      "languages": {},
+      "name": "unknown",
+      "path": [
+        "/docker-compose.yml",
+      ],
+      "reason": [
+        "matched: unknown",
+      ],
+      "tech": null,
+      "techs": [],
+    },
+  ],
+  "dependencies": [],
+  "edges": [],
+  "id": "7",
+  "inComponent": null,
+  "languages": {},
+  "name": "main",
+  "path": [
+    "/",
+  ],
+  "reason": [],
+  "tech": null,
+  "techs": [],
+}
+`;
+
+exports[`analyser > should run correctly 2`] = `
+{
+  "childs": [
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "npm",
+          "dd-trace",
+          "1.0.1",
+        ],
+        [
+          "npm",
+          "fastify",
+          "4.17.0",
+        ],
+        [
+          "npm",
+          "prisma",
+          "4.13.0",
+        ],
+        [
+          "npm",
+          "typescript",
+          "5.0.4",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "23",
+          "write": true,
+        },
+      ],
+      "id": "22",
+      "inComponent": null,
+      "languages": {
+        "JSON": 1,
+      },
+      "name": "@fake/api",
+      "path": [
+        "/pkgs/api/package.json",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "datadog",
+        "fastify",
+        "nodejs",
+        "prisma",
+        "typescript",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "npm",
+          "@fake/api",
+          "1.0.0",
+        ],
+        [
+          "npm",
+          "react",
+          "4.17.0",
+        ],
+        [
+          "npm",
+          "typescript",
+          "5.0.4",
+        ],
+        [
+          "npm",
+          "vite",
+          "4.3.3",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "22",
+          "write": true,
+        },
+      ],
+      "id": "24",
+      "inComponent": "25",
+      "languages": {
+        "HTML": 1,
+        "JSON": 1,
+        "SCSS": 1,
+      },
+      "name": "@fake/app",
+      "path": [
+        "/pkgs/app/package.json",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "nodejs",
+        "react",
+        "scss",
+        "typescript",
+        "vercel",
+        "vite",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [],
+      "edges": [],
+      "id": "21",
+      "inComponent": null,
+      "languages": {},
+      "name": "Algolia",
+      "path": [
+        "/php/composer.json",
+      ],
+      "reason": [],
+      "tech": "algolia",
+      "techs": [],
+    },
+    {
+      "childs": [],
+      "dependencies": [],
+      "edges": [],
+      "id": "23",
+      "inComponent": null,
+      "languages": {},
+      "name": "Datadog",
+      "path": [
+        "/pkgs/api/package.json",
+      ],
+      "reason": [],
+      "tech": "datadog",
+      "techs": [],
+    },
+    {
+      "childs": [],
+      "dependencies": [],
+      "edges": [],
+      "id": "13",
+      "inComponent": null,
+      "languages": {},
+      "name": "GitHub",
+      "path": [
+        "/package.json",
+      ],
+      "reason": [],
+      "tech": "github",
+      "techs": [],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "terraform",
+          "registry.terraform.io/hashicorp/google",
+          "4.61.0",
+        ],
+      ],
+      "edges": [],
+      "id": "29",
+      "inComponent": null,
+      "languages": {},
+      "name": "Google Cloud Platform",
+      "path": [
+        "/terraform/.terraform.lock.hcl",
+      ],
+      "reason": [],
+      "tech": "gcp",
+      "techs": [],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "terraform",
+          "registry.terraform.io/vercel/vercel",
+          "4.61.0",
+        ],
+      ],
+      "edges": [],
+      "id": "25",
+      "inComponent": null,
+      "languages": {},
+      "name": "Vercel",
+      "path": [
+        "/pkgs/app/package.json",
+        "/terraform/.terraform.lock.hcl",
+      ],
+      "reason": [],
+      "tech": "vercel",
+      "techs": [
+        "vercel",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "postgres",
+          "14.5-alpine",
+        ],
+      ],
+      "edges": [],
+      "id": "9",
+      "inComponent": null,
+      "languages": {},
+      "name": "db",
+      "path": [
+        "/docker-compose.yml",
+        "/deno/deno.lock",
+      ],
+      "reason": [],
+      "tech": "postgresql",
+      "techs": [
+        "postgresql",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "npm",
+          "@typescript-eslint/eslint-plugin",
+          "5.57.1",
+        ],
+        [
+          "npm",
+          "@typescript-eslint/parser",
+          "5.57.1",
+        ],
+        [
+          "npm",
+          "eslint",
+          "8.39.0",
+        ],
+        [
+          "npm",
+          "prettier",
+          "2.8.7",
+        ],
+        [
+          "npm",
+          "typescript",
+          "4.9.5",
+        ],
+        [
+          "githubAction",
+          "actions/checkout",
+          "v3",
+        ],
+        [
+          "githubAction",
+          "actions/setup-node",
+          "v3",
+        ],
+        [
+          "githubAction",
+          "codecov/codecov-action",
+          "v3",
+        ],
+        [
+          "docker",
+          "node",
+          "18.17.0",
+        ],
+        [
+          "deno",
+          "https://deno.land/x/postgres@v0.17.0/mod.ts",
+          "23a1a36928f1b6d3b0170aaa67de09af12aa998525f608ff7331b9fb364cbde6",
+        ],
+        [
+          "golang",
+          "github.com/google/uuid",
+          "v1.3.0",
+        ],
+        [
+          "ruby",
+          "rails",
+          "6.1.7.4",
+        ],
+        [
+          "ruby",
+          "puma\\", \\"6.3.0",
+          "latest",
+        ],
+        [
+          "terraform",
+          "registry.terraform.io/hashicorp/google",
+          "4.61.0",
+        ],
+        [
+          "terraform",
+          "registry.terraform.io/vercel/vercel",
+          "4.61.0",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "13",
+          "write": true,
+        },
+      ],
+      "id": "12",
+      "inComponent": null,
+      "languages": {
+        "AMPL": 1,
+        "Go": 1,
+        "HCL": 1,
+        "HTML": 1,
+        "JSON": 4,
+        "SCSS": 1,
+        "TOML": 1,
+        "YAML": 3,
+      },
+      "name": "fake",
+      "path": [
+        "/package.json",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "deno",
+        "docker",
+        "eslint",
+        "github",
+        "github.actions",
+        "golang",
+        "nodejs",
+        "prettier",
+        "ruby",
+        "terraform",
+        "typescript",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "redis",
+          "7.0.4-alpine",
+        ],
+      ],
+      "edges": [],
+      "id": "10",
+      "inComponent": null,
+      "languages": {},
+      "name": "redis",
+      "path": [
+        "/docker-compose.yml",
+        "/php/composer.json",
+      ],
+      "reason": [],
+      "tech": "redis",
+      "techs": [
+        "redis",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "rust",
+          "dotenv",
+          "0.15.0",
+        ],
+      ],
+      "edges": [],
+      "id": "27",
+      "inComponent": null,
+      "languages": {
+        "TOML": 1,
+      },
+      "name": "rust-server",
+      "path": [
+        "/rust/Cargo.toml",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "rust",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [],
+      "edges": [],
+      "id": "18",
+      "inComponent": null,
+      "languages": {
+        "Go": 1,
+      },
+      "name": "server",
+      "path": [
+        "/golang/cmd/server/main.go",
+      ],
+      "reason": [],
+      "tech": "golang",
+      "techs": [
+        "golang",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "php",
+          "mockery/mockery",
+          "~1.0",
+        ],
+        [
+          "php",
+          "phpunit/phpunit",
+          "^9.0",
+        ],
+        [
+          "php",
+          "php-mock/php-mock-mockery",
+          "^1.3",
+        ],
+        [
+          "php",
+          "dms/phpunit-arraysubset-asserts",
+          "^0.2.1",
+        ],
+        [
+          "php",
+          "fakerphp/faker",
+          "^1.13",
+        ],
+        [
+          "php",
+          "slevomat/coding-standard",
+          "^7.0",
+        ],
+        [
+          "php",
+          "nunomaduro/larastan",
+          "^2.1",
+        ],
+        [
+          "php",
+          "laravel/tinker",
+          "^2.7",
+        ],
+        [
+          "php",
+          "php",
+          ">=8.0",
+        ],
+        [
+          "php",
+          "laravel/framework",
+          "^9.0",
+        ],
+        [
+          "php",
+          "james-heinrich/getid3",
+          "^1.9",
+        ],
+        [
+          "php",
+          "guzzlehttp/guzzle",
+          "^7.0.1",
+        ],
+        [
+          "php",
+          "aws/aws-sdk-php-laravel",
+          "^3.1",
+        ],
+        [
+          "php",
+          "pusher/pusher-php-server",
+          "^4.0",
+        ],
+        [
+          "php",
+          "predis/predis",
+          "~1.0",
+        ],
+        [
+          "php",
+          "jackiedo/dotenv-editor",
+          "^2.0",
+        ],
+        [
+          "php",
+          "ext-exif",
+          "*",
+        ],
+        [
+          "php",
+          "ext-gd",
+          "*",
+        ],
+        [
+          "php",
+          "ext-fileinfo",
+          "*",
+        ],
+        [
+          "php",
+          "ext-json",
+          "*",
+        ],
+        [
+          "php",
+          "ext-SimpleXML",
+          "*",
+        ],
+        [
+          "php",
+          "daverandom/resume",
+          "^0.0.3",
+        ],
+        [
+          "php",
+          "laravel/helpers",
+          "^1.0",
+        ],
+        [
+          "php",
+          "intervention/image",
+          "^2.5",
+        ],
+        [
+          "php",
+          "doctrine/dbal",
+          "^3.0",
+        ],
+        [
+          "php",
+          "lstrojny/functional-php",
+          "^1.14",
+        ],
+        [
+          "php",
+          "teamtnt/laravel-scout-tntsearch-driver",
+          "^11.1",
+        ],
+        [
+          "php",
+          "algolia/algoliasearch-client-php",
+          "^3.3",
+        ],
+        [
+          "php",
+          "laravel/ui",
+          "^3.2",
+        ],
+        [
+          "php",
+          "webmozart/assert",
+          "^1.10",
+        ],
+        [
+          "php",
+          "laravel/sanctum",
+          "^2.15",
+        ],
+        [
+          "php",
+          "laravel/scout",
+          "^9.4",
+        ],
+        [
+          "php",
+          "nunomaduro/collision",
+          "^6.2",
+        ],
+        [
+          "php",
+          "jwilsson/spotify-web-api-php",
+          "^5.2",
+        ],
+        [
+          "php",
+          "meilisearch/meilisearch-php",
+          "^0.24.0",
+        ],
+        [
+          "php",
+          "http-interop/http-factory-guzzle",
+          "^1.2",
+        ],
+      ],
+      "edges": [
+        {
+          "read": true,
+          "target": "10",
+          "write": true,
+        },
+        {
+          "read": true,
+          "target": "21",
+          "write": true,
+        },
+      ],
+      "id": "19",
+      "inComponent": null,
+      "languages": {
+        "JSON": 1,
+      },
+      "name": "symfony/translation",
+      "path": [
+        "/php/composer.json",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [
+        "algolia",
+        "laravel",
+        "php",
+        "phpunit",
+        "redis",
+      ],
+    },
+    {
+      "childs": [],
+      "dependencies": [
+        [
+          "docker",
+          "unknown",
+          "7.17.5",
+        ],
+      ],
+      "edges": [],
+      "id": "11",
+      "inComponent": null,
+      "languages": {},
+      "name": "unknown",
+      "path": [
+        "/docker-compose.yml",
+      ],
+      "reason": [],
+      "tech": null,
+      "techs": [],
+    },
+  ],
+  "dependencies": [
+    [
+      "docker",
+      "postgres",
+      "14.5-alpine",
+    ],
+    [
+      "docker",
+      "redis",
+      "7.0.4-alpine",
+    ],
+    [
+      "docker",
+      "unknown",
+      "7.17.5",
+    ],
+    [
+      "php",
+      "mockery/mockery",
+      "~1.0",
+    ],
+    [
+      "php",
+      "phpunit/phpunit",
+      "^9.0",
+    ],
+    [
+      "php",
+      "php-mock/php-mock-mockery",
+      "^1.3",
+    ],
+    [
+      "php",
+      "dms/phpunit-arraysubset-asserts",
+      "^0.2.1",
+    ],
+    [
+      "php",
+      "fakerphp/faker",
+      "^1.13",
+    ],
+    [
+      "php",
+      "slevomat/coding-standard",
+      "^7.0",
+    ],
+    [
+      "php",
+      "nunomaduro/larastan",
+      "^2.1",
+    ],
+    [
+      "php",
+      "laravel/tinker",
+      "^2.7",
+    ],
+    [
+      "php",
+      "php",
+      ">=8.0",
+    ],
+    [
+      "php",
+      "laravel/framework",
+      "^9.0",
+    ],
+    [
+      "php",
+      "james-heinrich/getid3",
+      "^1.9",
+    ],
+    [
+      "php",
+      "guzzlehttp/guzzle",
+      "^7.0.1",
+    ],
+    [
+      "php",
+      "aws/aws-sdk-php-laravel",
+      "^3.1",
+    ],
+    [
+      "php",
+      "pusher/pusher-php-server",
+      "^4.0",
+    ],
+    [
+      "php",
+      "predis/predis",
+      "~1.0",
+    ],
+    [
+      "php",
+      "jackiedo/dotenv-editor",
+      "^2.0",
+    ],
+    [
+      "php",
+      "ext-exif",
+      "*",
+    ],
+    [
+      "php",
+      "ext-gd",
+      "*",
+    ],
+    [
+      "php",
+      "ext-fileinfo",
+      "*",
+    ],
+    [
+      "php",
+      "ext-json",
+      "*",
+    ],
+    [
+      "php",
+      "ext-SimpleXML",
+      "*",
+    ],
+    [
+      "php",
+      "daverandom/resume",
+      "^0.0.3",
+    ],
+    [
+      "php",
+      "laravel/helpers",
+      "^1.0",
+    ],
+    [
+      "php",
+      "intervention/image",
+      "^2.5",
+    ],
+    [
+      "php",
+      "doctrine/dbal",
+      "^3.0",
+    ],
+    [
+      "php",
+      "lstrojny/functional-php",
+      "^1.14",
+    ],
+    [
+      "php",
+      "teamtnt/laravel-scout-tntsearch-driver",
+      "^11.1",
+    ],
+    [
+      "php",
+      "algolia/algoliasearch-client-php",
+      "^3.3",
+    ],
+    [
+      "php",
+      "laravel/ui",
+      "^3.2",
+    ],
+    [
+      "php",
+      "webmozart/assert",
+      "^1.10",
+    ],
+    [
+      "php",
+      "laravel/sanctum",
+      "^2.15",
+    ],
+    [
+      "php",
+      "laravel/scout",
+      "^9.4",
+    ],
+    [
+      "php",
+      "nunomaduro/collision",
+      "^6.2",
+    ],
+    [
+      "php",
+      "jwilsson/spotify-web-api-php",
+      "^5.2",
+    ],
+    [
+      "php",
+      "meilisearch/meilisearch-php",
+      "^0.24.0",
+    ],
+    [
+      "php",
+      "http-interop/http-factory-guzzle",
+      "^1.2",
+    ],
+    [
+      "npm",
+      "dd-trace",
+      "1.0.1",
+    ],
+    [
+      "npm",
+      "fastify",
+      "4.17.0",
+    ],
+    [
+      "npm",
+      "prisma",
+      "4.13.0",
+    ],
+    [
+      "npm",
+      "typescript",
+      "5.0.4",
+    ],
+    [
+      "terraform",
+      "registry.terraform.io/vercel/vercel",
+      "4.61.0",
+    ],
+    [
+      "npm",
+      "@fake/api",
+      "1.0.0",
+    ],
+    [
+      "npm",
+      "react",
+      "4.17.0",
+    ],
+    [
+      "npm",
+      "vite",
+      "4.3.3",
+    ],
+    [
+      "rust",
+      "dotenv",
+      "0.15.0",
+    ],
+    [
+      "terraform",
+      "registry.terraform.io/hashicorp/google",
+      "4.61.0",
+    ],
+    [
+      "npm",
+      "@typescript-eslint/eslint-plugin",
+      "5.57.1",
+    ],
+    [
+      "npm",
+      "@typescript-eslint/parser",
+      "5.57.1",
+    ],
+    [
+      "npm",
+      "eslint",
+      "8.39.0",
+    ],
+    [
+      "npm",
+      "prettier",
+      "2.8.7",
+    ],
+    [
+      "npm",
+      "typescript",
+      "4.9.5",
+    ],
+    [
+      "githubAction",
+      "actions/checkout",
+      "v3",
+    ],
+    [
+      "githubAction",
+      "actions/setup-node",
+      "v3",
+    ],
+    [
+      "githubAction",
+      "codecov/codecov-action",
+      "v3",
+    ],
+    [
+      "docker",
+      "node",
+      "18.17.0",
+    ],
+    [
+      "deno",
+      "https://deno.land/x/postgres@v0.17.0/mod.ts",
+      "23a1a36928f1b6d3b0170aaa67de09af12aa998525f608ff7331b9fb364cbde6",
+    ],
+    [
+      "golang",
+      "github.com/google/uuid",
+      "v1.3.0",
+    ],
+    [
+      "ruby",
+      "rails",
+      "6.1.7.4",
+    ],
+    [
+      "ruby",
+      "puma\\", \\"6.3.0",
+      "latest",
+    ],
+  ],
+  "edges": [],
+  "id": "31",
+  "inComponent": null,
+  "languages": {
+    "AMPL": 2,
+    "Go": 3,
+    "HCL": 2,
+    "HTML": 3,
+    "JSON": 11,
+    "SCSS": 3,
+    "TOML": 3,
+    "YAML": 6,
+  },
+  "name": "flatten",
+  "path": [
+    "/",
+    "/docker-compose.yml",
+    "/deno/deno.lock",
+    "/php/composer.json",
+    "/package.json",
+    "/golang/cmd/server/main.go",
+    "/pkgs/api/package.json",
+    "/pkgs/app/package.json",
+    "/terraform/.terraform.lock.hcl",
+    "/rust/Cargo.toml",
+  ],
+  "reason": [],
+  "tech": null,
+  "techs": [
+    "algolia",
+    "datadog",
+    "deno",
+    "docker",
+    "eslint",
+    "fastify",
+    "gcp",
+    "github",
+    "github.actions",
+    "golang",
+    "laravel",
+    "nodejs",
+    "php",
+    "phpunit",
+    "postgresql",
+    "prettier",
+    "prisma",
+    "react",
+    "redis",
+    "ruby",
+    "rust",
+    "scss",
+    "terraform",
+    "typescript",
+    "vercel",
+    "vite",
+  ],
+}
+`;

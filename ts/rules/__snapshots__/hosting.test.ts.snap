@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`hosting > should match everything with files 1`] = `
+[
+  "cloudflare.workers",
+  "expodev",
+  "github.pages",
+  "koyeb",
+  "platformsh",
+  "render",
+  "replit",
+]
+`;

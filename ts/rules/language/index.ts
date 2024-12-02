@@ -1,0 +1,9 @@
+import './bash.js';
+import './c.js';
+import './cplusplus.js';
+import './csharp.js';
+import './css.js';
+import './dart.js';
+import './elixir.js';
+import './java.js';
+import './scss.js';
