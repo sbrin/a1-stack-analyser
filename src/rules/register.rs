@@ -47,7 +47,9 @@ pub fn register_all() -> Result<(), String> {
         js::react::register_react(),
         js::typescript::register_typescript(),
         spec::nodejs::register_nodejs(),
-        // Add other registration function calls here
+        spec::rust::register_rust(),
+        db::postgres::register_postgres(),
+        spec::docker::register_docker(),
     ];
 
     // Check if any registration failed

@@ -1,3 +1,6 @@
+pub mod component;
+use component::detect_node_component;
+
 use crate::rules::register::register;
 use crate::types::rule::{Rule, RuleDependency, RuleFiles};
 
@@ -42,6 +45,8 @@ pub fn register_nodejs() -> Result<(), String> {
                 ..Default::default()
             },
         ]),
+        detect: Some(vec![detect_node_component]),
+
         ..Default::default()
     })
 }

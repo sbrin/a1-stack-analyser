@@ -67,11 +67,6 @@ pub enum RuleFiles {
     },
 }
 
-pub struct RuleWithFile {
-    pub tech: String,
-    pub files: RuleFiles,
-}
-
 pub type ComponentMatcher =
     fn(files: &Vec<ProviderFile>, provider: &dyn BaseProvider) -> Result<Payload, bool>;
 

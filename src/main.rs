@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::collections::HashMap;
 
 mod payload;
 mod provider;
@@ -16,11 +16,14 @@ pub struct AnalyserOptions<P: BaseProvider> {
     provider: P,
 }
 
-pub async fn analyser<P: BaseProvider>(opts: AnalyserOptions<P>) -> Payload {
+pub fn analyser<P: BaseProvider>(opts: AnalyserOptions<P>) -> Payload {
     let provider = opts.provider;
     let mut pl = Payload::new("main", "/");
 
-    pl.recurse(&provider, &provider.base_path()).await;
+    register_all();
+    load_all_rules(&REGISTERED_RULES.lock().unwrap());
+
+    pl.recurse(&provider, &provider.base_path());
 
     pl
 }
@@ -33,7 +36,7 @@ fn main() {
         ),
     });
 
-    let res = futures::executor::block_on(future);
+    let res = future;
     println!("{:?}", res);
 }
 
@@ -44,40 +47,54 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_should_register_component_of_same_tech() {
+        let docker_compose = r#"version: '3'
+services:
+  db:
+    container_name: db
+    image: postgres:15.1-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=postgres"#;
+
+        let provider = FakeProvider::new(
+            HashMap::from_iter([(
+                "/".to_string(),
+                vec!["package.json".to_string(), "docker-compose.yml".to_string()],
+            )]),
+            HashMap::from_iter([
+                (
+                    "/docker-compose.yml".to_string(),
+                    docker_compose.to_string(),
+                ),
+                (
+                    "/package.json".to_string(),
+                    r#"{ "name": "test", "dependencies": {"pg": "1.0.0"}}"#.to_string(),
+                ),
+            ]),
+        );
+
+        let result = analyser(AnalyserOptions { provider });
+
+        // Add assertions based on your actual implementation
+        assert_eq!(result.name, "main");
+        assert!(result.path.contains("/"));
+        println!("analyser result: {:?}", result);
+        assert_eq!(result.childs.len(), 2); // Should have two child nodes
+    }
+
+    #[test]
     fn test_basic_analyser() {
         let provider = FakeProvider::new(
             HashMap::from_iter([("/".to_string(), vec![])]),
             HashMap::new(),
         );
 
-        let result = futures::executor::block_on(analyser(AnalyserOptions { provider }));
+        let result = analyser(AnalyserOptions { provider });
 
         assert_eq!(result.name, "main");
         assert!(result.path.contains("/"));
         assert!(result.childs.is_empty());
-    }
-
-    #[test]
-    fn test_analyser_with_files() {
-        let provider = FakeProvider::new(
-            HashMap::from_iter([
-                (
-                    "/".to_string(),
-                    vec!["file1.txt".to_string(), "file2.txt".to_string()],
-                ),
-                ("/subdir".to_string(), vec!["file3.txt".to_string()]),
-            ]),
-            HashMap::from_iter([
-                ("/file1.txt".to_string(), "content1".to_string()),
-                ("/file2.txt".to_string(), "content2".to_string()),
-                ("/subdir/file3.txt".to_string(), "content3".to_string()),
-            ]),
-        );
-
-        let result = futures::executor::block_on(analyser(AnalyserOptions { provider }));
-
-        assert_eq!(result.name, "main");
-        assert!(result.path.contains("/"));
-        // assert_eq!(result.childs.len(), 3); // 2 files + 1 subdirectory
     }
 }

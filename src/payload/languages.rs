@@ -1,47 +1,30 @@
+use serde::Deserialize;
 use std::path::Path;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub enum LangType {
+    #[serde(rename = "data")]
     Data,
+    #[serde(rename = "markup")]
     Markup,
+    #[serde(rename = "programming")]
     Programming,
+    #[serde(rename = "prose")]
     Prose,
 }
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct LangListItem {
-    extensions: Vec<String>,
-    group: Option<String>,
-    name: String,
-    lang_type: LangType,
+    pub extensions: Vec<String>,
+    pub group: Option<String>,
+    pub name: String,
+    #[serde(rename = "type")]
+    pub lang_type: LangType,
 }
 
-impl LangListItem {
-    pub fn name(&self) -> &str {
-        &self.name
-    }
+const LANGUAGES_JSON: &str = include_str!("languages.json");
 
-    pub fn group(&self) -> Option<&str> {
-        self.group.as_deref()
-    }
-}
-
-// Source: https://github.com/github/linguist/blob/5a0c74277548122267d84283910abd5e0b89380e/lib/linguist/languages.yml#L1528
 pub fn raw_list() -> Vec<LangListItem> {
-    vec![
-        LangListItem {
-            extensions: vec![".bsl".to_string(), ".os".to_string()],
-            group: None,
-            name: "1C Enterprise".to_string(),
-            lang_type: LangType::Programming,
-        },
-        LangListItem {
-            extensions: vec![".2da".to_string()],
-            group: None,
-            name: "2-Dimensional Array".to_string(),
-            lang_type: LangType::Data,
-        },
-    ]
+    serde_json::from_str(LANGUAGES_JSON).expect("Failed to parse languages.json")
 }
 
 pub fn languages() -> Vec<LangListItem> {
@@ -79,8 +62,6 @@ pub fn detect_lang(filename: &str) -> Option<LangListItem> {
                 .find(|lang| lang.extensions.contains(&ext))
         })
 }
-
-// ... existing code ...
 
 #[cfg(test)]
 mod tests {

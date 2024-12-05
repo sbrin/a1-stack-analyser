@@ -1,6 +1,7 @@
 use crate::{
-    provider::base::BaseProvider,
+    provider::base::{BaseProvider, FileType, IGNORED_DIVE_PATHS},
     rules::{loader::RULES_COMPONENTS, register::NAME_TO_KEY},
+    types::rule::ComponentMatcher,
 };
 use std::collections::{HashMap, HashSet};
 
@@ -23,6 +24,7 @@ pub struct Payload {
     pub edges: Vec<Edge>,
     pub parent: Option<Box<Payload>>,
     pub reason: HashSet<String>,
+    pub components: Vec<ComponentMatcher>, // Add this new field
 }
 
 #[derive(Debug, Clone)]
@@ -36,6 +38,7 @@ impl Payload {
     pub fn new(name: &str, folder_path: &str) -> Self {
         let mut path = HashSet::new();
         path.insert(folder_path.to_string());
+        let components = RULES_COMPONENTS.lock().unwrap().clone();
 
         Self {
             id: generate_id(), // You'll need to implement this
@@ -49,29 +52,31 @@ impl Payload {
             edges: Vec::new(),
             parent: None,
             reason: HashSet::new(),
+            components,
         }
     }
 
-    pub async fn recurse<P: BaseProvider>(&mut self, provider: &P, file_path: &str) {
-        let files = provider.list_dir(file_path).await;
-
-        let mut ctx = self;
-
-        let components = RULES_COMPONENTS.lock().unwrap();
-        for rule in components.iter() {
+    pub fn recurse<P: BaseProvider>(&mut self, provider: &P, file_path: &str) {
+        let files = provider.list_dir(file_path);
+        let ctx = self;
+        let components = ctx.components.clone();
+        println!("Recurse components: {:?}", components);
+        for rule in &components {
             let res = rule(&files, provider);
+            println!("rule res: {:?}", res);
             let payloads = match res {
                 Ok(payload) => vec![payload],
-                Err(_) => continue,
+                Err(_) => {
+                    println!("no match res");
+                    continue;
+                }
             };
-
+            println!("Recurse Payloads: {:?}", payloads);
             for pl in payloads {
                 if pl.name != "virtual" {
                     ctx.add_child(pl);
                 } else {
-                    ctx.combine_dependencies(&pl); // Use pl directly
-
-                    // Move this line after the for loop
+                    ctx.combine_dependencies(&pl);
                     for child in pl.childs {
                         ctx.add_child(child);
                     }
@@ -79,26 +84,28 @@ impl Payload {
             }
         }
 
-        // // Detect Tech
+        println!("Recurse provider: {:?}", &provider);
+
         let matched = match_all_files(&files, &provider.base_path());
         ctx.add_techs(&matched);
 
-        // // Recursively dive in folders
-        // for file in files {
-        //     if file.is_file() {
-        //         ctx.detect_lang(&file.name);
-        //         continue;
-        //     }
+        println!("Recurse files: {:?}", &files);
+        // Handle directories separately
+        for file in files {
+            if matches!(file.file_type, FileType::File) {
+                ctx.detect_lang(&file.name);
+                continue;
+            }
 
-        //     if IGNORED_DIVE_PATHS.contains(&file.name) {
-        //         continue;
-        //     }
+            if IGNORED_DIVE_PATHS.contains(&file.name.as_str()) {
+                continue;
+            }
 
-        //     let fp = Path::new(file_path).join(&file.name);
-        //     let fp_str = fp.to_str().unwrap_or(file_path);
-
-        //     await ctx.recurse(provider, fp_str).await;
-        // }
+            // ... existing directory handling code ...
+            let new_path = &file.fp;
+            println!("Checking directory: {}", new_path); // Debug print
+            ctx.recurse(provider, new_path);
+        }
     }
 
     /// Register a relationship between this Payload and another one.
@@ -132,7 +139,8 @@ impl Payload {
     /// Detect language of a file at this level.
     pub fn detect_lang(&mut self, filename: &str) {
         if let Some(lang) = detect_lang(filename) {
-            let lang_name = lang.group().unwrap_or(lang.name());
+            let lang_name = lang.group.unwrap_or(lang.name);
+            println!("lang_name {:?}", lang_name);
             self.add_lang(&lang_name, 1);
         }
     }
@@ -152,7 +160,7 @@ impl Payload {
         find_hosting(self, tech);
     }
 
-    pub fn add_child(&mut self, mut service: Payload) -> &mut Payload {
+    pub fn add_child(&mut self, service: Payload) -> &mut Payload {
         // Find existing child with same name or tech
         let existing_idx = self.childs.iter().position(|s| {
             s.name == service.name
@@ -201,6 +209,163 @@ fn generate_id() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::{
+        provider::fake::FakeProvider,
+        rules::{
+            loader::load_all_rules,
+            register::{register_all, REGISTERED_RULES},
+        },
+    };
+
+    #[test]
+    fn test_recurse() {
+        // Create a more realistic directory structure
+        let mut paths = HashMap::new();
+        paths.insert(
+            "/test".to_string(),
+            vec![
+                "main.rs".to_string(),
+                "Cargo.toml".to_string(),
+                "src/".to_string(),
+            ],
+        );
+        paths.insert(
+            "/test/src/".to_string(),
+            vec!["lib.rs".to_string(), "main.rs".to_string()],
+        );
+
+        println!("Available paths in provider: {:?}", paths); // Debug
+
+        register_all();
+        load_all_rules(&REGISTERED_RULES.lock().unwrap());
+
+        let files = HashMap::new();
+        let provider = FakeProvider::new(paths, files);
+        let mut payload = Payload::new("test_service", "/test");
+
+        println!("provider result: {:?}", provider);
+
+        payload.recurse(&provider, "/test");
+
+        println!("payload result: {:?}", payload);
+
+        // Add assertions to verify the recursion results
+        assert!(
+            !payload.languages.is_empty(),
+            "Should detect languages from .rs files"
+        );
+        assert!(
+            payload.languages.contains_key("Rust"),
+            "Should detect Rust language"
+        );
+        assert!(
+            payload.path.contains("/test"),
+            "Should contain the base path"
+        );
+
+        println!("Languages detected: {:?}", payload.languages); // Debug print
+        println!("Techs detected: {:?}", payload.techs); // Debug print
+        println!("Reasons detected: {:?}", payload.reason); // Debug print
+        println!("childs detected: {:?}", payload.childs); // Debug print
+        assert!(false);
+        // Verify file count - we expect 2 Rust files in total
+        assert_eq!(
+            *payload.languages.get("Rust").unwrap_or(&0),
+            3,
+            "Should count two Rust lang"
+        );
+
+        // Verify Cargo.toml was detected
+        assert!(
+            payload.techs.contains("rust"),
+            "Should detect Rust tech from Cargo.toml"
+        );
+        assert!(
+            payload.reason.contains("matched file: Cargo.toml"),
+            "Should list Cargo.toml as a reason"
+        );
+    }
+
+    #[test]
+    fn test_add_edges() {
+        let mut payload = Payload::new("service1", "/path1");
+        let target = Payload::new("service2", "/path2");
+
+        payload.add_edges(target.clone());
+
+        assert_eq!(payload.edges.len(), 1);
+        assert_eq!(payload.edges[0].target.name, "service2");
+        assert!(payload.edges[0].read);
+        assert!(payload.edges[0].write);
+    }
+
+    #[test]
+    fn test_add_lang() {
+        let mut payload = Payload::new("service1", "/path1");
+
+        payload.add_lang("rust", 1);
+        payload.add_lang("rust", 2);
+
+        assert_eq!(payload.languages.len(), 1);
+        assert_eq!(payload.languages.get("rust"), Some(&3));
+    }
+
+    #[test]
+    fn test_set_parent() {
+        let mut payload = Payload::new("child", "/child");
+        let parent = Payload::new("parent", "/parent");
+
+        payload.set_parent(Some(parent.clone()));
+
+        assert!(payload.parent.is_some());
+        assert_eq!(payload.parent.as_ref().unwrap().name, "parent"); // Changed this line
+
+        // Test removing parent
+        payload.set_parent(None);
+        assert!(payload.parent.is_none());
+    }
+
+    #[test]
+    fn test_detect_lang() {
+        let mut payload = Payload::new("service1", "/path1");
+
+        payload.detect_lang("main.rs");
+        assert!(payload.languages.contains_key("Rust"));
+
+        payload.detect_lang("script.py");
+        assert!(payload.languages.contains_key("Python"));
+
+        payload.detect_lang("unknown.xyz");
+        assert_eq!(payload.languages.len(), 2); // Should not add unknown extensions
+    }
+
+    #[test]
+    fn test_add_techs() {
+        let mut payload = Payload::new("service1", "/path1");
+        let mut tech_map = HashMap::new();
+        tech_map.insert("rust".to_string(), vec!["Cargo.toml".to_string()]);
+        tech_map.insert("docker".to_string(), vec!["Dockerfile".to_string()]);
+
+        payload.add_techs(&tech_map);
+
+        assert_eq!(payload.techs.len(), 2);
+        assert!(payload.techs.contains("rust"));
+        assert!(payload.techs.contains("docker"));
+        assert_eq!(payload.reason.len(), 2);
+        assert!(payload.reason.contains("Cargo.toml"));
+        assert!(payload.reason.contains("Dockerfile"));
+    }
+
+    #[test]
+    fn test_add_tech() {
+        let mut payload = Payload::new("service1", "/path1");
+        let reasons = vec!["package.json".to_string()];
+
+        payload.add_tech("nodejs", &reasons);
+
+        assert!(payload.techs.contains("nodejs"));
+        assert!(payload.reason.contains("package.json"));
+    }
 
     #[test]
     fn test_add_child() {

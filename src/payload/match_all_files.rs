@@ -37,7 +37,7 @@ pub fn match_all_files(files: &[ProviderFile], base_path: &str) -> HashMap<Strin
             }
         }
     }
-
+    println!("match_all_files matched: {:?}", matched);
     matched
 }
 
@@ -48,7 +48,7 @@ mod tests {
         provider::base::FileType,
         rules::{
             loader::load_all_rules,
-            register::{register_all, LIST_INDEXED, REGISTERED_RULES},
+            register::{register_all, REGISTERED_RULES},
         },
     };
 

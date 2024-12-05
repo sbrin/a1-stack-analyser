@@ -34,6 +34,7 @@ lazy_static! {
     pub static ref RAW_LIST: Mutex<Vec<RuleEntry>> = Mutex::new(Vec::new());
 }
 
+#[derive(Debug)]
 pub struct DependencyMatcher {
     pub match_pattern: Regex,
     pub tech: String,
@@ -54,7 +55,9 @@ pub fn load_all_rules(registered_rules: &[Rule]) {
 
 pub fn load_one(rule: &Rule) {
     // Handle dependencies
+    // println!("Loading Rule: {:?}", rule);
     if let Some(deps) = &rule.dependencies {
+        // println!("Load one rule dependencies: {:?}", deps);
         for dep in deps {
             if let Some(name) = &dep.name {
                 if name.is_empty() {
@@ -66,7 +69,6 @@ pub fn load_one(rule: &Rule) {
 
                 let pattern = Regex::new(&format!("^{}$", name)).unwrap();
                 let mut dependencies = DEPENDENCIES.lock().unwrap();
-
                 if let Some(dep_list) = dependencies.get_mut(&dep.r#type) {
                     dep_list.push(DependencyMatcher {
                         match_pattern: pattern,
@@ -77,6 +79,11 @@ pub fn load_one(rule: &Rule) {
                 RAW_LIST.lock().unwrap().push(RuleEntry::Dependency {
                     ref_rule: dep.clone(),
                 });
+                // println!(
+                //     "
+                // Loaded dependencies: {:?}",
+                //     dependencies
+                // );
             }
         }
     }
@@ -132,7 +139,7 @@ mod tests {
     use super::*;
     use crate::payload::payload::Payload;
     use crate::provider::base::{BaseProvider, FileType, ProviderFile};
-    use crate::rules::register::{self, LIST_INDEXED};
+    use crate::rules::register::{self};
     use std::collections::HashSet;
     use std::sync::Once;
 
