@@ -50,14 +50,12 @@ pub fn load_all_rules(registered_rules: &[Rule]) {
     for rule in registered_rules.iter() {
         load_one(&rule);
     }
-    println!("Loaded {} rules", registered_rules.len());
+    // println!("Loaded {} rules", registered_rules.len());
 }
 
 pub fn load_one(rule: &Rule) {
     // Handle dependencies
-    // println!("Loading Rule: {:?}", rule);
     if let Some(deps) = &rule.dependencies {
-        // println!("Load one rule dependencies: {:?}", deps);
         for dep in deps {
             if let Some(name) = &dep.name {
                 if name.is_empty() {
@@ -79,11 +77,6 @@ pub fn load_one(rule: &Rule) {
                 RAW_LIST.lock().unwrap().push(RuleEntry::Dependency {
                     ref_rule: dep.clone(),
                 });
-                // println!(
-                //     "
-                // Loaded dependencies: {:?}",
-                //     dependencies
-                // );
             }
         }
     }

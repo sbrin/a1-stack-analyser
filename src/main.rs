@@ -20,24 +20,21 @@ pub fn analyser<P: BaseProvider>(opts: AnalyserOptions<P>) -> Payload {
     let provider = opts.provider;
     let mut pl = Payload::new("main", "/");
 
-    register_all();
-    load_all_rules(&REGISTERED_RULES.lock().unwrap());
-
     pl.recurse(&provider, &provider.base_path());
 
     pl
 }
 
 fn main() {
-    let future = analyser(AnalyserOptions {
-        provider: FakeProvider::new(
-            HashMap::from_iter([("/".to_string(), vec![])]),
-            HashMap::new(),
-        ),
-    });
-
-    let res = future;
-    println!("{:?}", res);
+    // println!(
+    //     "{:?}",
+    //     analyser(AnalyserOptions {
+    //         provider: FakeProvider::new(
+    //             HashMap::from_iter([("/".to_string(), vec![])]),
+    //             HashMap::new(),
+    //         ),
+    //     })
+    // );
 }
 
 // ... existing code ...
@@ -45,6 +42,28 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn test_should_not_find_anything() {
+        register_all();
+        load_all_rules(&REGISTERED_RULES.lock().unwrap());
+
+        let provider = FakeProvider::new(
+            HashMap::from_iter([("/".to_string(), vec![])]),
+            HashMap::new(),
+        );
+
+        let result = analyser(AnalyserOptions { provider });
+
+        assert_eq!(result.name, "main");
+        assert!(result.path.contains("/"));
+        assert!(result.tech.is_none());
+        assert!(result.languages.is_empty());
+        assert!(result.childs.is_empty());
+        assert!(result.techs.is_empty());
+        assert!(result.dependencies.is_empty());
+        assert!(result.edges.is_empty());
+        assert!(result.reason.is_empty());
+    }
 
     #[test]
     fn test_should_register_component_of_same_tech() {
@@ -57,6 +76,9 @@ services:
       - '5432:5432'
     environment:
       - POSTGRES_PASSWORD=postgres"#;
+
+        register_all();
+        load_all_rules(&REGISTERED_RULES.lock().unwrap());
 
         let provider = FakeProvider::new(
             HashMap::from_iter([(
@@ -76,25 +98,10 @@ services:
         );
 
         let result = analyser(AnalyserOptions { provider });
-
+        // println!("analyser result: {:#?}", result);
         // Add assertions based on your actual implementation
         assert_eq!(result.name, "main");
         assert!(result.path.contains("/"));
-        println!("analyser result: {:?}", result);
         assert_eq!(result.childs.len(), 2); // Should have two child nodes
-    }
-
-    #[test]
-    fn test_basic_analyser() {
-        let provider = FakeProvider::new(
-            HashMap::from_iter([("/".to_string(), vec![])]),
-            HashMap::new(),
-        );
-
-        let result = analyser(AnalyserOptions { provider });
-
-        assert_eq!(result.name, "main");
-        assert!(result.path.contains("/"));
-        assert!(result.childs.is_empty());
     }
 }

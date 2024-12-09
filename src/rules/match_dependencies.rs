@@ -7,7 +7,7 @@ pub fn match_dependencies(pkgs: &[String], dep_type: &str) -> HashMap<String, Ve
 
     if let Some(type_deps) = dependencies.get(dep_type) {
         for dep in pkgs {
-            println!("Match deps: {:?} - {:?}", pkgs, type_deps);
+            // println!("Match deps: {:?} - {:?}", pkgs, type_deps);
             for matcher in type_deps {
                 if matcher.match_pattern.is_match(dep) {
                     matched
@@ -18,7 +18,7 @@ pub fn match_dependencies(pkgs: &[String], dep_type: &str) -> HashMap<String, Ve
             }
         }
     }
-    println!("matched deps: {:?}", matched);
+    // println!("matched deps: {:?}", matched);
     matched
 }
 

@@ -22,11 +22,6 @@ pub fn detect_node_component(
     provider: &dyn BaseProvider,
 ) -> Result<Payload, bool> {
     for file in files {
-        println!(
-            "
-        ========== Nodejs Debug =========
-        "
-        );
         if !FILES.contains(&file.name.as_str()) {
             continue;
         }

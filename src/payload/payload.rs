@@ -39,9 +39,8 @@ impl Payload {
         let mut path = HashSet::new();
         path.insert(folder_path.to_string());
         let components = RULES_COMPONENTS.lock().unwrap().clone();
-
         Self {
-            id: generate_id(), // You'll need to implement this
+            id: generate_id(),
             name: name.to_string(),
             path,
             tech: None,
@@ -58,12 +57,10 @@ impl Payload {
 
     pub fn recurse<P: BaseProvider>(&mut self, provider: &P, file_path: &str) {
         let files = provider.list_dir(file_path);
-        let ctx = self;
-        let components = ctx.components.clone();
-        println!("Recurse components: {:?}", components);
+        let mut ctx = self.clone();
+        let components = self.components.clone();
         for rule in &components {
             let res = rule(&files, provider);
-            println!("rule res: {:?}", res);
             let payloads = match res {
                 Ok(payload) => vec![payload],
                 Err(_) => {
@@ -71,27 +68,29 @@ impl Payload {
                     continue;
                 }
             };
-            println!("Recurse Payloads: {:?}", payloads);
+            // println!("Recurse Payloads: {:?}", payloads);
             for pl in payloads {
                 if pl.name != "virtual" {
-                    ctx.add_child(pl);
+                    ctx = pl.clone();
+                    self.add_child(pl);
                 } else {
-                    ctx.combine_dependencies(&pl);
+                    self.combine_dependencies(&pl);
                     for child in pl.childs {
-                        ctx.add_child(child);
+                        self.add_child(child);
                     }
                 }
             }
         }
 
-        println!("Recurse provider: {:?}", &provider);
+        // println!("Recurse provider: {:#?} - {:?}", &provider, ctx.id);
 
         let matched = match_all_files(&files, &provider.base_path());
         ctx.add_techs(&matched);
 
-        println!("Recurse files: {:?}", &files);
+        // println!("Recurse files: {:?}", &files);
         // Handle directories separately
         for file in files {
+            // println!("File {:#?}", file);
             if matches!(file.file_type, FileType::File) {
                 ctx.detect_lang(&file.name);
                 continue;
@@ -103,7 +102,7 @@ impl Payload {
 
             // ... existing directory handling code ...
             let new_path = &file.fp;
-            println!("Checking directory: {}", new_path); // Debug print
+            // println!("Checking directory: {}", new_path); // Debug print
             ctx.recurse(provider, new_path);
         }
     }
@@ -138,9 +137,9 @@ impl Payload {
 
     /// Detect language of a file at this level.
     pub fn detect_lang(&mut self, filename: &str) {
+        // println!("detect lang {:?} - {:?}", filename, self.id);
         if let Some(lang) = detect_lang(filename) {
             let lang_name = lang.group.unwrap_or(lang.name);
-            println!("lang_name {:?}", lang_name);
             self.add_lang(&lang_name, 1);
         }
     }
@@ -234,7 +233,7 @@ mod tests {
             vec!["lib.rs".to_string(), "main.rs".to_string()],
         );
 
-        println!("Available paths in provider: {:?}", paths); // Debug
+        // println!("Available paths in provider: {:?}", paths); // Debug
 
         register_all();
         load_all_rules(&REGISTERED_RULES.lock().unwrap());
@@ -243,11 +242,11 @@ mod tests {
         let provider = FakeProvider::new(paths, files);
         let mut payload = Payload::new("test_service", "/test");
 
-        println!("provider result: {:?}", provider);
+        // println!("provider result: {:?}", provider);
 
         payload.recurse(&provider, "/test");
 
-        println!("payload result: {:?}", payload);
+        // println!("payload result: {:?}", payload);
 
         // Add assertions to verify the recursion results
         assert!(
@@ -263,10 +262,10 @@ mod tests {
             "Should contain the base path"
         );
 
-        println!("Languages detected: {:?}", payload.languages); // Debug print
-        println!("Techs detected: {:?}", payload.techs); // Debug print
-        println!("Reasons detected: {:?}", payload.reason); // Debug print
-        println!("childs detected: {:?}", payload.childs); // Debug print
+        // println!("Languages detected: {:?}", payload.languages);
+        // println!("Techs detected: {:?}", payload.techs);
+        // println!("Reasons detected: {:?}", payload.reason);
+        // println!("childs detected: {:?}", payload.childs);
         assert!(false);
         // Verify file count - we expect 2 Rust files in total
         assert_eq!(
