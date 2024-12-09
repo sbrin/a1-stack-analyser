@@ -415,11 +415,7 @@ mod tests {
         assert_eq!(payload1.dependencies.len(), 3); // Should have 3 unique dependency sets
 
         // Convert dependencies to a set of strings for easier comparison
-        let deps: HashSet<String> = payload1
-            .dependencies
-            .iter()
-            .map(|dep| dep.join("_"))
-            .collect();
+        let deps: HashSet<String> = payload1.dependencies.iter().map(|dep| dep.join("_")).collect();
 
         assert!(deps.contains("dep1_dep2"));
         assert!(deps.contains("dep3"));

@@ -46,10 +46,7 @@ impl BaseProvider for FakeProvider {
                             } else {
                                 FileType::File
                             },
-                            fp: Path::new(path_relative)
-                                .join(file)
-                                .to_string_lossy()
-                                .to_string(),
+                            fp: Path::new(path_relative).join(file).to_string_lossy().to_string(),
                         }
                     })
                     .collect::<Vec<_>>();

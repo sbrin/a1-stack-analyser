@@ -56,11 +56,7 @@ pub fn detect_lang(filename: &str) -> Option<LangListItem> {
     languages()
         .into_iter()
         .find(|lang| lang.extensions.contains(&ext))
-        .or_else(|| {
-            others()
-                .into_iter()
-                .find(|lang| lang.extensions.contains(&ext))
-        })
+        .or_else(|| others().into_iter().find(|lang| lang.extensions.contains(&ext)))
 }
 
 #[cfg(test)]
@@ -83,9 +79,7 @@ mod tests {
     fn test_languages() {
         let langs = languages();
         // All items should be programming languages
-        assert!(langs
-            .iter()
-            .all(|l| matches!(l.lang_type, LangType::Programming)));
+        assert!(langs.iter().all(|l| matches!(l.lang_type, LangType::Programming)));
         // Should contain 1C Enterprise
         assert!(langs.iter().any(|l| l.name == "1C Enterprise"));
     }
@@ -94,9 +88,7 @@ mod tests {
     fn test_others() {
         let other_langs = others();
         // No programming languages should be present
-        assert!(other_langs
-            .iter()
-            .all(|l| !matches!(l.lang_type, LangType::Programming)));
+        assert!(other_langs.iter().all(|l| !matches!(l.lang_type, LangType::Programming)));
         // Should contain 2-Dimensional Array
         assert!(other_langs.iter().any(|l| l.name == "2-Dimensional Array"));
     }

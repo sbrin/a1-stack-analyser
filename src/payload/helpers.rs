@@ -46,10 +46,7 @@ pub fn find_hosting(pl: &mut Payload, tech: &str) {
         return;
     }
 
-    let find = pl
-        .childs
-        .iter()
-        .find(|c| c.tech.as_ref() == Some(&ref_rule.tech));
+    let find = pl.childs.iter().find(|c| c.tech.as_ref() == Some(&ref_rule.tech));
     if find.is_none() {
         panic!("cant find hosting {}", ref_rule.tech);
     }

@@ -120,10 +120,7 @@ pub fn load_one(rule: &Rule) {
 
     // Handle component detectors
     if let Some(detectors) = &rule.detect {
-        RULES_COMPONENTS
-            .lock()
-            .unwrap()
-            .extend(detectors.iter().cloned());
+        RULES_COMPONENTS.lock().unwrap().extend(detectors.iter().cloned());
     }
 }
 
@@ -146,11 +143,7 @@ mod tests {
     }
 
     fn clear_test_storage() {
-        DEPENDENCIES
-            .lock()
-            .unwrap()
-            .iter_mut()
-            .for_each(|(_, v)| v.clear());
+        DEPENDENCIES.lock().unwrap().iter_mut().for_each(|(_, v)| v.clear());
         RULES_TECHS.lock().unwrap().clear();
         RULES_EXTENSIONS.lock().unwrap().clear();
         RULES_COMPONENTS.lock().unwrap().clear();

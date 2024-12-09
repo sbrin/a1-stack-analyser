@@ -25,14 +25,8 @@ pub fn register(rule: Rule) -> Result<(), String> {
     registered_tech.insert(rule.tech.clone());
 
     REGISTERED_RULES.lock().unwrap().push(rule.clone());
-    LIST_INDEXED
-        .lock()
-        .unwrap()
-        .insert(rule.tech.clone(), rule.clone());
-    NAME_TO_KEY
-        .lock()
-        .unwrap()
-        .insert(rule.name.clone(), rule.tech);
+    LIST_INDEXED.lock().unwrap().insert(rule.tech.clone(), rule.clone());
+    NAME_TO_KEY.lock().unwrap().insert(rule.name.clone(), rule.tech);
 
     Ok(())
 }

@@ -42,11 +42,7 @@ mod tests {
     }
 
     fn clear_test_storage() {
-        DEPENDENCIES
-            .lock()
-            .unwrap()
-            .iter_mut()
-            .for_each(|(_, v)| v.clear());
+        DEPENDENCIES.lock().unwrap().iter_mut().for_each(|(_, v)| v.clear());
     }
 
     #[test]

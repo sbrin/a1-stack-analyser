@@ -110,10 +110,8 @@ pub fn detect_rust_component(
                         ..
                     } => {
                         if let Some(path_str) = path {
-                            let version_suffix = version
-                                .as_ref()
-                                .map(|v| format!(":{}", v))
-                                .unwrap_or_default();
+                            let version_suffix =
+                                version.as_ref().map(|v| format!(":{}", v)).unwrap_or_default();
                             format!("path:{}{}", path_str, version_suffix)
                         } else if let Some(git_str) = git {
                             let suffix = branch
