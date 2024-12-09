@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Run cargo fmt on staged files
+echo "Running cargo fmt..."
+cargo fmt -- --check
+if [ $? -ne 0 ]; then
+    echo "Formatting errors found. Running cargo fmt..."
+    cargo fmt
+    echo "Please stage the formatting changes and commit again."
+    exit 1
+fi
